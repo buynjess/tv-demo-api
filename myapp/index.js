@@ -1,8 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const db = require('monk')('mongodb://admin:password1@ds133865.mlab.com:33865/tvshows')
+const tvshowscollection = db.get('tvshows')
 const app = express()
 const port = 4000
-const tvShows = []
+let tvShows = []
 
 app.use(bodyParser.json())
 
@@ -13,18 +15,19 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get('/shows', (req, res) => res.send(tvShows))
+app.get('/shows', async (req, res) => {
+    const tvShows = await tvshowscollection.find()
+    console.log("this is my get request", tvShows)
+    res.send(tvShows)
+});
 
-app.post('/shows', (req, res) => {
-    const tvShow = {
-        name:req.body.name,
-        rating:req.body.rating,
-        imgurl:req.body.imgurl
-    }
-    tvshows.push(tvshow)
-    console.log(body)
-    res.send(tvShow)
-})
+app.post('/shows', async (req, res) => {   
+    tvshowscollection.insert(req.body)
+    console.log(tvshows)
+        // tvShows.push(req.body)
+        res.send(tvShows)
+    }); 
+    
 
 app.put('/shows', (req, res) => res.send('PUTing stuff'))
 
