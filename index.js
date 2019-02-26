@@ -22,10 +22,10 @@ app.get('/shows', async (req, res) => {
 });
 
 app.post('/shows', async (req, res) => {   
-    tvshowscollection.insert(req.body)
+   const response = await tvshowscollection.insert(req.body)
     console.log(tvshows)
         // tvShows.push(req.body)
-        res.send(tvShows)
+        res.send(response)
     }); 
     
 
